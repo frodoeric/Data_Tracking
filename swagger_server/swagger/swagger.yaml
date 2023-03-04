@@ -1,0 +1,1070 @@
+openapi: 3.0.3
+info:
+  title: IPL Tracking - Microservice API
+  description: API description for Tracking microservice.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/tracking
+  description: Localhost - BT3 Dev
+tags:
+- name: Commons
+  description: Commons definition
+paths:
+  /customers:
+    get:
+      tags:
+      - Customer
+      summary: Get Customers list
+      description: This operation is used to retrieve a list of Customers.
+      operationId: list_customers
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCustomersResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.customer_controller
+    post:
+      tags:
+      - Customer
+      summary: Create new Customer
+      description: This operation is usedto create a new Customer on System.
+      operationId: create_customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCustomerResponse'
+        "400":
+          description: Parameters missing in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: There is already a customer registered with same name or mail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.customer_controller
+  /customers/{customerId}:
+    get:
+      tags:
+      - Customer
+      summary: Get a single Customer's info
+      description: This operation is used to retrieve the details of a specific device.
+      operationId: get_customer
+      parameters:
+      - name: customerId
+        in: path
+        description: Unique identifier of the Customer in the database
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/UUID'
+        example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.customer_controller
+    delete:
+      tags:
+      - Customer
+      summary: Delete Customer
+      description: This operation is delete a Customer.
+      operationId: delete_customer
+      parameters:
+      - name: customerId
+        in: path
+        description: Unique identifier of the Customer in the database
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/UUID'
+        example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: Delete a customer that has vehicles is not allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.customer_controller
+    put:
+      tags:
+      - Customer
+      summary: Update Customer's attributes
+      description: This operation is used to update some of the Customer's attributes.
+      operationId: update_customer
+      parameters:
+      - name: customerId
+        in: path
+        description: Unique identifier of the Customer in the database
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/UUID'
+        example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomerRequest'
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: "Parameters missing in request or request is malformed. For\
+            \ example, the mail is not in the correct format."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: There is already a Customer registered with same name or email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.customer_controller
+  /tdata:
+    get:
+      tags:
+        - TData
+      summary: Get Data list
+      description: This operation is used to retrieve a list of Telemetry Data.
+      operationId: list_tdatas
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTDatasResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.tdata_controller
+    post:
+      tags:
+        - TData
+      summary: Create new Data
+      description: This operation is used to create a new Data Telemetry on System.
+      operationId: create_tdata
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTDataRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTDataResponse'
+        "400":
+          description: Parameters missing in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: There is already a data registered with same name or mail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.tdata_controller
+  /tdata/{tdataId}:
+    get:
+      tags:
+        - TData
+      summary: Get a single TData's info
+      description: This operation is used to retrieve the details of a specific Data.
+      operationId: get_tdata
+      parameters:
+        - name: tdataId
+          in: path
+          description: Unique identifier of the Data in the database
+          required: true
+          style: simple
+          explode: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTDataResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.tdata_controller
+    delete:
+      tags:
+        - TData
+      summary: Delete Customer
+      description: This operation is delete a Data.
+      operationId: delete_tdata
+      parameters:
+        - name: tdataId
+          in: path
+          description: Unique identifier of the Data in the database
+          required: true
+          style: simple
+          explode: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: Delete a data that has vehicles is not allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.tdata_controller
+    put:
+      tags:
+        - TData
+      summary: Update Data's attributes
+      description: This operation is used to update some of the Data's attributes.
+      operationId: update_tdata
+      parameters:
+        - name: tdataId
+          in: path
+          description: Unique identifier of the Data in the database
+          required: true
+          style: simple
+          explode: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTDataRequest'
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: "Parameters missing in request or request is malformed. For\
+            \ example, the vehicle id is not in the correct format."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: There is already a Data registered with same id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.tdata_controller
+  /drivers:
+    get:
+      tags:
+      - Driver
+      summary: Get Drivers list
+      description: This operation is used to retrieve a list of Drivers.
+      operationId: list_drivers
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDriversResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.driver_controller
+    post:
+      tags:
+      - Driver
+      summary: Create new Driver
+      description: This operation is usedto create a new Driver on System.
+      operationId: create_driver
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDriverRequest'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDriverResponse'
+        "400":
+          description: Parameters missing in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: There is already a driver registered with same name or mail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.driver_controller
+  /drivers/{driverId}:
+    get:
+      tags:
+      - Driver
+      summary: Get a single Driver's info
+      description: This operation is used to retrieve the details of a specific device.
+      operationId: get_driver
+      parameters:
+      - name: driverId
+        in: path
+        description: Unique identifier of the Driver in the database
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/UUID'
+        example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDriverResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.driver_controller
+    delete:
+      tags:
+      - Driver
+      summary: Delete Driver
+      description: This operation is delete a Driver.
+      operationId: delete_driver
+      parameters:
+      - name: driverId
+        in: path
+        description: Unique identifier of the Driver in the database
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/UUID'
+        example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: Delete a driver that has vehicles is not allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.driver_controller
+    put:
+      tags:
+      - Driver
+      summary: Update Driver's attributes
+      description: This operation is used to update some of the Driver's attributes.
+      operationId: update_driver
+      parameters:
+      - name: driverId
+        in: path
+        description: Unique identifier of the Driver in the database
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/UUID'
+        example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDriverRequest'
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: "Parameters missing in request or request is malformed. For\
+            \ example, the mail is not in the correct format."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: There is already a Driver registered with same name or email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Unexpected errors not mapped to status codes mentioned above
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.driver_controller
+components:
+  schemas:
+    GetTDataResponse:
+      required:
+        - tdataId
+        - vehicleId
+      type: object
+      properties:
+        tdataId:
+          $ref: '#/components/schemas/UUID'
+        vehicleId:
+          $ref: '#/components/schemas/UUID'
+    CreateTDataRequest:
+      required:
+        - vehicleId
+      type: object
+      properties:
+        vehicleId:
+          $ref: '#/components/schemas/UUID'
+    CreateTDataResponse:
+      required:
+        - tdataId
+        - dataHora
+      type: object
+      properties:
+        tdataId:
+          $ref: '#/components/schemas/UUID'
+        dataHora:
+          format: date-time
+          type: string
+          description: Data hora
+          example: '2017-07-21T17:32:28Z'
+      example:
+        tdataId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+    ListTDatasResponse:
+      required:
+        - content
+        - totalResults
+      type: object
+      properties:
+        content:
+          type: array
+          description: list of paged items
+          items:
+            $ref: '#/components/schemas/GetTDataResponse'
+        totalResults:
+          type: integer
+          description: total number of records
+          format: int64
+          example: 50
+      description: generic paged response
+      example:
+        totalResults: 50
+        content:
+          - vehicleId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+            dataHora: '2017-07-21T17:32:28Z'
+    UpdateTDataRequest:
+      type: object
+      properties:
+        vehicleId:
+          $ref: '#/components/schemas/UUID'
+        dataHora:
+          format: date-time
+          type: string
+          description: Data hora
+          example: '2017-07-21T17:32:28Z'
+    GetCustomerResponse:
+      required:
+      - customerId
+      - mail
+      - name
+      - phone
+      type: object
+      properties:
+        customerId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+          description: Complete Customer name
+          example: Foo bar
+        phone:
+          type: string
+          description: Telephone number
+          example: "351912000111"
+        mail:
+          type: string
+          description: E-mail address
+          format: email
+          example: foo@bar.com
+      example:
+        mail: foo@bar.com
+        phone: "351912000111"
+        customerId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+        name: Foo bar
+    CreateCustomerRequest:
+      required:
+      - mail
+      - name
+      - phone
+      type: object
+      properties:
+        name:
+          type: string
+          description: Complete Customer name
+          example: Foo bar
+        phone:
+          type: string
+          description: Telephone number
+          example: "351912000111"
+        mail:
+          type: string
+          description: E-mail address
+          format: email
+          example: foo@bar.com
+    CreateCustomerResponse:
+      required:
+      - customerId
+      type: object
+      properties:
+        customerId:
+          $ref: '#/components/schemas/UUID'
+      example:
+        customerId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+    ListCustomersResponse:
+      required:
+      - content
+      - totalResults
+      type: object
+      properties:
+        content:
+          type: array
+          description: list of paged items
+          items:
+            $ref: '#/components/schemas/GetCustomerResponse'
+        totalResults:
+          type: integer
+          description: total number of records
+          format: int64
+          example: 50
+      description: generic paged response
+      example:
+        totalResults: 50
+        content:
+        - mail: foo@bar.com
+          phone: "351912000111"
+          customerId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+          name: Foo bar
+        - mail: foo@bar.com
+          phone: "351912000111"
+          customerId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+          name: Foo bar
+    UpdateCustomerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Complete Customer name
+          example: Foo bar
+        phone:
+          type: string
+          description: Telephone number
+          example: "351912000111"
+        mail:
+          type: string
+          description: E-mail address
+          format: email
+          example: foo@bar.com
+    GetDriverResponse:
+      required:
+      - driverId
+      - mail
+      - name
+      - phone
+      type: object
+      properties:
+        driverId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+          description: Complete Driver name
+          example: Foo bar
+        customerId:
+          $ref: '#/components/schemas/UUID'
+        phone:
+          type: string
+          description: Telephone number
+          example: "351912000111"
+        mail:
+          type: string
+          description: E-mail address
+          format: email
+          example: foo@bar.com
+      example:
+        driverId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+        mail: foo@bar.com
+        phone: "351912000111"
+        name: Foo bar
+        customerId: null
+    CreateDriverRequest:
+      required:
+      - mail
+      - name
+      - phone
+      type: object
+      properties:
+        name:
+          type: string
+          description: Complete Driver name
+          example: Foo bar
+        customerId:
+          $ref: '#/components/schemas/UUID'
+        phone:
+          type: string
+          description: Telephone number
+          example: "351912000111"
+        mail:
+          type: string
+          description: E-mail address
+          format: email
+          example: foo@bar.com
+    CreateDriverResponse:
+      required:
+      - driverId
+      type: object
+      properties:
+        driverId:
+          $ref: '#/components/schemas/UUID'
+      example:
+        driverId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+    ListDriversResponse:
+      required:
+      - content
+      - totalResults
+      type: object
+      properties:
+        content:
+          type: array
+          description: list of paged items
+          items:
+            $ref: '#/components/schemas/GetDriverResponse'
+        totalResults:
+          type: integer
+          description: total number of records
+          format: int64
+          example: 50
+      description: generic paged response
+      example:
+        totalResults: 50
+        content:
+        - driverId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+          mail: foo@bar.com
+          phone: "351912000111"
+          name: Foo bar
+          customerId: null
+        - driverId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+          mail: foo@bar.com
+          phone: "351912000111"
+          name: Foo bar
+          customerId: null
+    UpdateDriverRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Complete Driver name
+          example: Foo bar
+        customerId:
+          $ref: '#/components/schemas/UUID'
+        phone:
+          type: string
+          description: Telephone number
+          example: "351912000111"
+        mail:
+          type: string
+          description: E-mail address
+          format: email
+          example: foo@bar.com
+    EnumSensorType:
+      type: string
+      description: type of Sensor
+      enum:
+      - RPM
+      - ODOMETER
+      - SPEED
+    ErrorResponse:
+      required:
+      - errorCode
+      - errorMessage
+      - errorType
+      type: object
+      properties:
+        code:
+          type: string
+          description: Application error code
+          example: XYZ0001
+        type:
+          $ref: '#/components/schemas/ErrorTypeEnum'
+        message:
+          type: string
+          description: Short error explanation
+          example: Unauthorized
+        details:
+          type: string
+          description: Short error detail
+          example: Parameter X has invalid value
+    ErrorTypeEnum:
+      type: string
+      description: Error Type
+      enum:
+      - PERSISTENCE
+      - BUSINESS
+      - COMMUNICATION
+      - UNKNOWN
+    UUID:
+      pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      type: string
+      example: 0af401df-7d7a-1f36-817d-7b0a058d0003
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      x-basicInfoFunc: swagger_server.controllers.authorization_controller.check_basicAuth
+
