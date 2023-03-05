@@ -3,16 +3,10 @@
 # flake8: noqa
 from __future__ import absolute_import
 # import models into model package
-from swagger_server.models.create_customer_request import CreateCustomerRequest
-from swagger_server.models.create_customer_response import CreateCustomerResponse
-from swagger_server.models.create_driver_request import CreateDriverRequest
-from swagger_server.models.create_driver_response import CreateDriverResponse
-from swagger_server.models.enum_sensor_type import EnumSensorType
+from swagger_server.models.create_t_data_request import CreateTDataRequest
+from swagger_server.models.create_t_data_response import CreateTDataResponse
 from swagger_server.models.error_response import ErrorResponse
 from swagger_server.models.error_type_enum import ErrorTypeEnum
-from swagger_server.models.get_customer_response import GetCustomerResponse
-from swagger_server.models.get_driver_response import GetDriverResponse
-from swagger_server.models.list_customers_response import ListCustomersResponse
-from swagger_server.models.list_drivers_response import ListDriversResponse
-from swagger_server.models.update_customer_request import UpdateCustomerRequest
-from swagger_server.models.update_driver_request import UpdateDriverRequest
+from swagger_server.models.get_t_data_response import GetTDataResponse
+from swagger_server.models.list_t_datas_response import ListTDatasResponse
+from swagger_server.models.update_t_data_request import UpdateTDataRequest

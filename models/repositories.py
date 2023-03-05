@@ -1,5 +1,5 @@
 from config import db
-from models.entities import Customer, Driver, TData
+from models.entities import TData
 from typing import List, Type
 
 
@@ -37,18 +37,3 @@ class TDataRepository(BaseRepository):
         self.id_attr_name = 'tdata_id'
         self.db = db
         self.entity_model = TData
-
-class CustomerRepository (BaseRepository):
-
-    def __init__(self):
-        self.id_attr_name = 'customer_id'
-        self.db = db
-        self.entity_model = Customer
-
-
-class DriverRepository(BaseRepository):
-
-    def __init__(self):
-        self.id_attr_name = 'driver_id'
-        self.db = db
-        self.entity_model = Driver

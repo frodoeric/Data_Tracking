@@ -1,5 +1,5 @@
-from models.entities import Customer, Driver, TData
-from models.repositories import BaseRepository, CustomerRepository, DriverRepository, TDataRepository
+from models.entities import TData
+from models.repositories import BaseRepository, TDataRepository
 from typing import List, Type
 
 
@@ -30,15 +30,3 @@ class TDataService(BaseService):
         self.repository = TDataRepository()
         self.entity = TData
 
-class CustomerService (BaseService):
-
-    def __init__(self):
-        self.repository = CustomerRepository()
-        self.entity = Customer
-
-
-class DriverService(BaseService):
-
-    def __init__(self):
-        self.repository = DriverRepository()
-        self.entity = Driver
