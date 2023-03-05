@@ -276,8 +276,7 @@ components:
           $ref: '#/components/schemas/UUID'
     CreateDataResponse:
       required:
-        - vehicleId
-        - dataHora
+        - dataId
       type: object
       properties:
         dataId:

@@ -30,7 +30,7 @@ class GetDataResponse(Model):
 
         self.attribute_map = {
             'data_id': 'dataId',
-            'vehicle_id': 'vehicleId'
+            'vehicle_id': 'vehicle_id'
         }
         self._data_id = data_id
         self._vehicle_id = vehicle_id

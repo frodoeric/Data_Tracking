@@ -6,7 +6,7 @@ from typing import List
 
 
 class DataSchema(ma.SQLAlchemyAutoSchema):
-    customerId = fields.String(attribute="data_id")
+    dataId = fields.String(attribute="data_id")
 
     class Meta:
         model = Data

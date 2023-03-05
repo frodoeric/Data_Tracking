@@ -32,9 +32,9 @@ class CreateDataResponse(Model):
         }
 
         self.attribute_map = {
-            'data_id': 'dataId',
-            'vehicle_id': 'vehicleId',
-            'data_hora': 'dataHora'
+            'data_id': 'data_id',
+            'vehicle_id': 'vehicle_id',
+            'data_hora': 'data_hora'
         }
         self._data_id = data_id
         self._vehicle_id = vehicle_id
