@@ -3,7 +3,7 @@ import json
 import connexion
 import six
 import datetime
-from custom_errors import InvalidPayload, BaseCustomError
+from custom_errors import InvalidPayload, BaseCustomError, EntityNotFound
 from models.entities import Data
 from schemas.schemas import DataSchema
 from services.services import DataService
@@ -63,9 +63,26 @@ def delete_data(data_id):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        data_id = str.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    response = None
+    response_code = None
+    try:
+        entity = data_service.fetch_by_id(data_id)
+        if entity is None:
+            raise EntityNotFound(code="CST001", message="Customer not found",
+                                 details=f"Unable to find customer ID {data_id}")
+        data_service.delete(data_id)
+        response_code = 204
+    except BaseCustomError as bce:
+        response_code = bce.http_code
+        response = bce.to_error_response()
+    except Exception as e:
+        response_code = 500
+        response = ErrorResponse(code="CSM999", type=ErrorTypeEnum.UNKNOWN,
+                                 message="Ops.. Unknown error..", details=str(e))
+    if response is None:
+        return None, response_code
+    else:
+        return response.to_dict(), response_code
 
 
 def get_data(data_id):  # noqa: E501
@@ -80,12 +97,21 @@ def get_data(data_id):  # noqa: E501
     """
     response = None
     response_code = None
-
-    if connexion.request.is_json:
-        data_id = str.from_dict(connexion.request.get_json())  # noqa: E501
-
-
-    return 'do some magic!'
+    try:
+        entity = data_service.fetch_by_id(entity_id=data_id)
+        if entity is None:
+            raise EntityNotFound(code="CST001", message="Customer not found",
+                                 details=f"Unable to find customer ID {data_id}")
+        response = GetDataResponse.from_dict(json.loads(data_schema.dumps(entity)))
+        response_code = 200
+    except BaseCustomError as bce:
+        response_code = bce.http_code
+        response = bce.to_error_response()
+    except Exception as e:
+        response_code = 500
+        response = ErrorResponse(code="CSM999", type=ErrorTypeEnum.UNKNOWN,
+                                 message="Ops.. Unknown error..", details=str(e))
+    return response.to_dict(), response_code
 
 
 def list_datas():  # noqa: E501
@@ -118,8 +144,30 @@ def update_data(body, data_id):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
+    response = None
+    response_code = None
+    try:
+        if not connexion.request.is_json:
+            raise InvalidPayload(code="CST002", message="Invalid Request Payload",
+                                 details=f"Request payload is not a JSON valid")
         body = UpdateDataRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    if connexion.request.is_json:
-        data_id = str.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        entity = data_service.fetch_by_id(data_id)
+        if entity is None:
+            raise EntityNotFound(code="CST001", message="Customer not found",
+                                 details=f"Unable to find customer ID {data_id}")
+        entity.vehicle_id = body.vehicleId
+        entity.data_hora = datetime.datetime.now()
+        data_service.save(entity)
+        response_code = 204
+    except BaseCustomError as bce:
+        response_code = bce.http_code
+        response = bce.to_error_response()
+    except Exception as e:
+        response_code = 500
+        response = ErrorResponse(code="CSM999", type=ErrorTypeEnum.UNKNOWN,
+                                 message="Ops.. Unknown error..", details=str(e))
+
+    if response is None:
+        return None, response_code
+    else:
+        return response.to_dict(), response_code
