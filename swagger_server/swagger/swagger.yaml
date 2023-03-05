@@ -10,20 +10,20 @@ tags:
 - name: Commons
   description: Commons definition
 paths:
-  /tdata:
+  /data:
     get:
       tags:
-        - TData
+        - Data
       summary: Get Data list
       description: This operation is used to retrieve a list of Telemetry Data.
-      operationId: list_tdatas
+      operationId: list_datas
       responses:
         "200":
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListTDatasResponse'
+                $ref: '#/components/schemas/ListDatasResponse'
         "401":
           description: Unauthorized
           content:
@@ -42,18 +42,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      x-openapi-router-controller: swagger_server.controllers.t_data_controller
+      x-openapi-router-controller: swagger_server.controllers.data_controller
     post:
       tags:
-        - TData
+        - Data
       summary: Create new Data
       description: This operation is used to create a new Data Telemetry on System.
-      operationId: create_tdata
+      operationId: create_data
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTDataRequest'
+              $ref: '#/components/schemas/CreateDataRequest'
         required: true
       responses:
         "201":
@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTDataResponse'
+                $ref: '#/components/schemas/CreateDataResponse'
         "400":
           description: Parameters missing in request
           content:
@@ -92,16 +92,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      x-openapi-router-controller: swagger_server.controllers.t_data_controller
-  /tdata/{tdataId}:
+      x-openapi-router-controller: swagger_server.controllers.data_controller
+  /data/{dataId}:
     get:
       tags:
-        - TData
-      summary: Get a single TData's info
+        - Data
+      summary: Get a single Data's info
       description: This operation is used to retrieve the details of a specific Data.
-      operationId: get_tdata
+      operationId: get_data
       parameters:
-        - name: tdataId
+        - name: dataId
           in: path
           description: Unique identifier of the Data in the database
           required: true
@@ -116,7 +116,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetTDataResponse'
+                $ref: '#/components/schemas/GetDataResponse'
         "401":
           description: Unauthorized
           content:
@@ -141,15 +141,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      x-openapi-router-controller: swagger_server.controllers.t_data_controller
+      x-openapi-router-controller: swagger_server.controllers.data_controller
     delete:
       tags:
-        - TData
+        - Data
       summary: Delete Customer
       description: This operation is delete a Data.
-      operationId: delete_tdata
+      operationId: delete_data
       parameters:
-        - name: tdataId
+        - name: dataId
           in: path
           description: Unique identifier of the Data in the database
           required: true
@@ -191,15 +191,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      x-openapi-router-controller: swagger_server.controllers.t_data_controller
+      x-openapi-router-controller: swagger_server.controllers.data_controller
     put:
       tags:
-        - TData
+        - Data
       summary: Update Data's attributes
       description: This operation is used to update some of the Data's attributes.
-      operationId: update_tdata
+      operationId: update_data
       parameters:
-        - name: tdataId
+        - name: dataId
           in: path
           description: Unique identifier of the Data in the database
           required: true
@@ -212,7 +212,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTDataRequest'
+              $ref: '#/components/schemas/UpdateDataRequest'
         required: true
       responses:
         "204":
@@ -254,33 +254,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      x-openapi-router-controller: swagger_server.controllers.t_data_controller
+      x-openapi-router-controller: swagger_server.controllers.data_controller
 components:
   schemas:
-    GetTDataResponse:
+    GetDataResponse:
       required:
-        - tdataId
+        - dataId
         - vehicleId
       type: object
       properties:
-        tdataId:
+        dataId:
           $ref: '#/components/schemas/UUID'
         vehicleId:
           $ref: '#/components/schemas/UUID'
-    CreateTDataRequest:
+    CreateDataRequest:
       required:
         - vehicleId
       type: object
       properties:
         vehicleId:
           $ref: '#/components/schemas/UUID'
-    CreateTDataResponse:
+    CreateDataResponse:
       required:
         - vehicleId
         - dataHora
       type: object
       properties:
-        tdataId:
+        dataId:
           $ref: '#/components/schemas/UUID'
         vehicleId:
           $ref: '#/components/schemas/UUID'
@@ -290,10 +290,10 @@ components:
           description: Data hora
           example: '2017-07-21T17:32:28Z'
       example:
-        tdataId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+        dataId: 0af401df-7d7a-1f36-817d-7b0a058d0003
         vehicleId: 0af401df-7d7a-1f36-817d-7b0a058d0003
         dataHora: '2017-07-21T17:32:28Z'
-    ListTDatasResponse:
+    ListDatasResponse:
       required:
         - content
         - totalResults
@@ -303,7 +303,7 @@ components:
           type: array
           description: list of paged items
           items:
-            $ref: '#/components/schemas/GetTDataResponse'
+            $ref: '#/components/schemas/GetDataResponse'
         totalResults:
           type: integer
           description: total number of records
@@ -313,10 +313,10 @@ components:
       example:
         totalResults: 50
         content:
-          - tdataId: 0af401df-7d7a-1f36-817d-7b0a058d0003
+          - dataId: 0af401df-7d7a-1f36-817d-7b0a058d0003
             vehicleId: 0af401df-7d7a-1f36-817d-7b0a058d0003
             dataHora: '2017-07-21T17:32:28Z'
-    UpdateTDataRequest:
+    UpdateDataRequest:
       type: object
       properties:
         vehicleId:
@@ -364,4 +364,3 @@ components:
       type: http
       scheme: basic
       x-basicInfoFunc: swagger_server.controllers.authorization_controller.check_basicAuth
-

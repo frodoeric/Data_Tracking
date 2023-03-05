@@ -1,5 +1,5 @@
 from config import db
-from models.entities import TData
+from models.entities import Data
 from typing import List, Type
 
 
@@ -31,9 +31,9 @@ class BaseRepository:
         return entity
 
 
-class TDataRepository(BaseRepository):
+class DataRepository(BaseRepository):
 
     def __init__(self):
-        self.id_attr_name = 'tdata_id'
+        self.id_attr_name = 'data_id'
         self.db = db
-        self.entity_model = TData
+        self.entity_model = Data

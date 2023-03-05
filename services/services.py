@@ -1,5 +1,5 @@
-from models.entities import TData
-from models.repositories import BaseRepository, TDataRepository
+from models.entities import Data
+from models.repositories import BaseRepository, DataRepository
 from typing import List, Type
 
 
@@ -24,9 +24,9 @@ class BaseService:
         self.repository.delete(entity_id)
 
 
-class TDataService(BaseService):
+class DataService(BaseService):
 
     def __init__(self):
-        self.repository = TDataRepository()
-        self.entity = TData
+        self.repository = DataRepository()
+        self.entity = Data
 
